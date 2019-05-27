@@ -1,35 +1,35 @@
 extends KinematicBody
 
-var camera_angle = 0
-var mouse_sensitivity = 0.3
-var camera_change = Vector2()
+var camera_angle : float = 0
+var mouse_sensitivity : float = 0.3
+var camera_change : Vector2 = Vector2()
 
-var velocity = Vector3()
-var direction = Vector3()
+var velocity : Vector3 = Vector3()
+var direction : Vector3 = Vector3()
 
 #fly variables
-const FLY_SPEED = 20
-const FLY_ACCEL = 4
-var flying = false
+const FLY_SPEED : float = 20.0
+const FLY_ACCEL : float = 4.0
+var flying : bool = false
 
 #walk variables
-var gravity = -9.8 * 3
-const MAX_SPEED = 20
-const MAX_RUNNING_SPEED = 30
-const ACCEL = 2
-const DEACCEL = 6
+var gravity : float = -9.8 * 3
+const MAX_SPEED : float = 20.0
+const MAX_RUNNING_SPEED : float = 30.0
+const ACCEL : float = 2.0
+const DEACCEL : float = 6.0
 
 #jumping
-var jump_height = 15
-var in_air = 0
-var has_contact = false
+var jump_height : float = 15.0
+var in_air : int = 0
+var has_contact : bool = false
 
 #slope variables
-const MAX_SLOPE_ANGLE = 35
+const MAX_SLOPE_ANGLE : int = 35
 
 #stair variables
-const MAX_STAIR_SLOPE = 20
-const STAIR_JUMP_HEIGHT = 6
+const MAX_STAIR_SLOPE : int = 20
+const STAIR_JUMP_HEIGHT : int = 6
 
 func _ready():
 	# Called every time the node is added to the scene.
@@ -53,6 +53,7 @@ func walk(delta):
 	
 	# get the rotation of the camera
 	var aim = $Head/Camera.get_global_transform().basis
+	
 	# check input and change direction
 	if Input.is_action_pressed("move_forward"):
 		direction -= aim.z
@@ -69,7 +70,7 @@ func walk(delta):
 		has_contact = true
 		var n = $Tail.get_collision_normal()
 		var floor_angle = rad2deg(acos(n.dot(Vector3(0, 1, 0))))
-		if floor_angle > MAX_SLOPE_ANGLE:
+		if floor_angle > MAX_SLOPE_ANGLE: # only apply gravity if angle of floor is steep enough
 			velocity.y += gravity * delta
 		
 	else:
@@ -88,7 +89,7 @@ func walk(delta):
 			has_contact = false
 	
 	
-	var temp_velocity = velocity
+	var temp_velocity = velocity # only stores x and z velocities to not affect y velocity.
 	temp_velocity.y = 0
 	
 	var speed
@@ -101,6 +102,7 @@ func walk(delta):
 	# where would the player go at max speed
 	var target = direction * speed
 	
+	#use dot product to test if temp_velocity and direction are going the same direction
 	var acceleration
 	if direction.dot(temp_velocity) > 0:
 		acceleration = ACCEL
@@ -118,7 +120,7 @@ func walk(delta):
 		has_contact = false
 	
 	# move
-	velocity = move_and_slide(velocity, Vector3(0, 1, 0))
+	velocity = move_and_slide(velocity, Vector3(0, 1, 0)) # 2nd argument says what way is up, which lets functions like is_on_floor() work
 	
 	if !has_contact:
 		print(in_air)
