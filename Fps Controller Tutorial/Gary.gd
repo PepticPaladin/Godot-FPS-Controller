@@ -27,17 +27,14 @@ var has_contact : bool = false
 #slope variables
 const MAX_SLOPE_ANGLE : int = 35
 
-#stair variables
-const MAX_STAIR_SLOPE : int = 20
-const STAIR_JUMP_HEIGHT : int = 6
+onready var mainNode : Spatial = get_node("..") #Gets gary's parent, the Main node in this case
 
 func _ready():
-	# Called every time the node is added to the scene.
-	# Initialization here
-	pass
+	mainNode.invOpen = false
 
 func _physics_process(delta):
-	aim()
+	if !mainNode.invOpen:
+		aim()
 	if flying:
 		fly(delta)
 	else:
@@ -80,13 +77,6 @@ func walk(delta):
 
 	if (has_contact and !is_on_floor()):
 		move_and_collide(Vector3(0, -1, 0))
-	
-	if (direction.length() > 0 and $StairCatcher.is_colliding()):
-		var stair_normal = $StairCatcher.get_collision_normal()
-		var stair_angle = rad2deg(acos(stair_normal.dot(Vector3(0, 1, 0))))
-		if stair_angle < MAX_STAIR_SLOPE:
-			velocity.y = STAIR_JUMP_HEIGHT
-			has_contact = false
 	
 	
 	var temp_velocity = velocity # only stores x and z velocities to not affect y velocity.

@@ -1,0 +1,13 @@
+[remap]
+
+importer="image"
+type="Image"
+path="res://.import/TestCrosshair.png-c98ac75bc68553c25d914d4e747b2742.image"
+
+[deps]
+
+source_file="res://TestCrosshair.png"
+dest_files=[ "res://.import/TestCrosshair.png-c98ac75bc68553c25d914d4e747b2742.image" ]
+
+[params]
+
