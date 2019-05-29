@@ -1,28 +1,30 @@
 extends KinematicBody
 
-var camera_angle : float = 0
-var mouse_sensitivity : float = 0.3
-var camera_change : Vector2 = Vector2()
+var camera_angle : float
+var mouse_sensitivity : float
+var camera_change : Vector2
 
-var velocity : Vector3 = Vector3()
-var direction : Vector3 = Vector3()
+var velocity : Vector3
+var direction : Vector3
 
 #fly variables
 const FLY_SPEED : float = 20.0
 const FLY_ACCEL : float = 4.0
-var flying : bool = false
+
+var flying : bool
 
 #walk variables
-var gravity : float = -9.8 * 3
+const GRAVITY : float = -9.8 * 3
 const MAX_SPEED : float = 20.0
 const MAX_RUNNING_SPEED : float = 30.0
 const ACCEL : float = 2.0
 const DEACCEL : float = 6.0
 
 #jumping
-var jump_height : float = 15.0
-var in_air : int = 0
-var has_contact : bool = false
+const JUMP_HEIGHT : float = 15.0
+
+var in_air : int
+var has_contact : bool
 
 #slope variables
 const MAX_SLOPE_ANGLE : int = 35
@@ -30,6 +32,19 @@ const MAX_SLOPE_ANGLE : int = 35
 onready var mainNode : Spatial = get_node("..") #Gets gary's parent, the Main node in this case
 
 func _ready():
+	camera_angle = 0
+	mouse_sensitivity = 0.3
+	camera_change = Vector2()
+	
+	velocity = Vector3()
+	direction = Vector3()
+	
+	flying = false
+	
+	in_air = 0
+	has_contact = false
+	
+	
 	mainNode.invOpen = false
 
 func _physics_process(delta):
@@ -67,13 +82,13 @@ func walk(delta):
 		has_contact = true
 		var n = $Tail.get_collision_normal()
 		var floor_angle = rad2deg(acos(n.dot(Vector3(0, 1, 0))))
-		if floor_angle > MAX_SLOPE_ANGLE: # only apply gravity if angle of floor is steep enough
-			velocity.y += gravity * delta
+		if floor_angle > MAX_SLOPE_ANGLE: # only apply GRAVITY if angle of floor is steep enough
+			velocity.y += GRAVITY * delta
 		
 	else:
 		if !$Tail.is_colliding():
 			has_contact = false
-		velocity.y += gravity * delta
+		velocity.y += GRAVITY * delta
 
 	if (has_contact and !is_on_floor()):
 		move_and_collide(Vector3(0, -1, 0))
@@ -106,7 +121,7 @@ func walk(delta):
 	velocity.z = temp_velocity.z
 	
 	if has_contact and Input.is_action_just_pressed("jump"):
-		velocity.y = jump_height
+		velocity.y = JUMP_HEIGHT
 		has_contact = false
 	
 	# move
