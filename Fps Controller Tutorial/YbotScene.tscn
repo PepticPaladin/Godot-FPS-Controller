@@ -12,66 +12,69 @@
 [ext_resource path="res://anim_jogStrafeRight.anim" type="Animation" id=10]
 [ext_resource path="res://anim_tpose.anim" type="Animation" id=11]
 
-[sub_resource type="AnimationNodeBlend2" id=1]
-filter_enabled = true
-filters = [ "Skeleton:mixamorig_Head", "Skeleton:mixamorig_Hips", "Skeleton:mixamorig_LeftFoot", "Skeleton:mixamorig_LeftLeg", "Skeleton:mixamorig_LeftToeBase", "Skeleton:mixamorig_LeftUpLeg", "Skeleton:mixamorig_Neck", "Skeleton:mixamorig_RightFoot", "Skeleton:mixamorig_RightLeg", "Skeleton:mixamorig_RightToeBase", "Skeleton:mixamorig_RightUpLeg", "Skeleton:mixamorig_Spine", "Skeleton:mixamorig_Spine1", "Skeleton:mixamorig_Spine2" ]
-sync = true
-
-[sub_resource type="AnimationNodeAnimation" id=2]
+[sub_resource type="AnimationNodeAnimation" id=1]
 animation = "anim_idle"
 
-[sub_resource type="AnimationNodeAnimation" id=3]
+[sub_resource type="AnimationNodeAnimation" id=2]
 animation = "anim_jogForward"
 
-[sub_resource type="AnimationNodeAnimation" id=4]
+[sub_resource type="AnimationNodeAnimation" id=3]
 animation = "anim_jogBackward"
 
-[sub_resource type="AnimationNodeAnimation" id=5]
+[sub_resource type="AnimationNodeAnimation" id=4]
 animation = "anim_jogStrafeRight"
 
-[sub_resource type="AnimationNodeAnimation" id=6]
+[sub_resource type="AnimationNodeAnimation" id=5]
 animation = "anim_JogStrafeLeft"
 
-[sub_resource type="AnimationNodeAnimation" id=7]
+[sub_resource type="AnimationNodeAnimation" id=6]
 animation = "anim_jogForwardLeft"
 
-[sub_resource type="AnimationNodeAnimation" id=8]
+[sub_resource type="AnimationNodeAnimation" id=7]
 animation = "anim_jogForwardRight"
 
-[sub_resource type="AnimationNodeAnimation" id=9]
+[sub_resource type="AnimationNodeAnimation" id=8]
 animation = "anim_jogBackwardLeft"
 
-[sub_resource type="AnimationNodeAnimation" id=10]
+[sub_resource type="AnimationNodeAnimation" id=9]
 animation = "anim_jogBackwardRight"
 
-[sub_resource type="AnimationNodeBlendSpace2D" id=11]
-blend_point_0/node = SubResource( 3 )
+[sub_resource type="AnimationNodeBlendSpace2D" id=10]
+blend_point_0/node = SubResource( 2 )
 blend_point_0/pos = Vector2( 0, 0.6 )
-blend_point_1/node = SubResource( 4 )
+blend_point_1/node = SubResource( 3 )
 blend_point_1/pos = Vector2( 0, -0.6 )
-blend_point_2/node = SubResource( 5 )
+blend_point_2/node = SubResource( 4 )
 blend_point_2/pos = Vector2( 0.3, 0 )
-blend_point_3/node = SubResource( 6 )
+blend_point_3/node = SubResource( 5 )
 blend_point_3/pos = Vector2( -0.3, 0 )
-blend_point_4/node = SubResource( 7 )
+blend_point_4/node = SubResource( 6 )
 blend_point_4/pos = Vector2( -0.2, 0.4 )
-blend_point_5/node = SubResource( 8 )
+blend_point_5/node = SubResource( 7 )
 blend_point_5/pos = Vector2( 0.2, 0.4 )
-blend_point_6/node = SubResource( 9 )
+blend_point_6/node = SubResource( 8 )
 blend_point_6/pos = Vector2( -0.2, -0.4 )
-blend_point_7/node = SubResource( 10 )
+blend_point_7/node = SubResource( 9 )
 blend_point_7/pos = Vector2( 0.2, -0.4 )
 
+[sub_resource type="AnimationNodeTransition" id=11]
+input_count = 2
+xfade_time = 0.2
+input_0/name = "Idle"
+input_0/auto_advance = false
+input_1/name = "Movement"
+input_1/auto_advance = false
+
 [sub_resource type="AnimationNodeBlendTree" id=12]
-graph_offset = Vector2( -345, -181 )
-nodes/Blend2/node = SubResource( 1 )
-nodes/Blend2/position = Vector2( 120, -20 )
-nodes/Idle/node = SubResource( 2 )
-nodes/Idle/position = Vector2( -160, 0 )
-"nodes/Movement Blend/node" = SubResource( 11 )
-"nodes/Movement Blend/position" = Vector2( -160, 120 )
-nodes/output/position = Vector2( 420, 180 )
-node_connections = [ "output", 0, "Blend2", "Blend2", 0, "Idle", "Blend2", 1, "Movement Blend" ]
+graph_offset = Vector2( -289, -108 )
+nodes/Idle/node = SubResource( 1 )
+nodes/Idle/position = Vector2( -100, -40 )
+"nodes/Movement Blend/node" = SubResource( 10 )
+"nodes/Movement Blend/position" = Vector2( -100, 120 )
+nodes/output/position = Vector2( 660, 40 )
+nodes/transition/node = SubResource( 11 )
+nodes/transition/position = Vector2( 180, 0 )
+node_connections = [ "output", 0, "transition", "transition", 0, "Idle", "transition", 1, "Movement Blend" ]
 
 [node name="Scene Root" index="0" instance=ExtResource( 1 )]
 
@@ -91,5 +94,5 @@ anims/anim_tpose = ExtResource( 11 )
 tree_root = SubResource( 12 )
 anim_player = NodePath("..")
 active = true
-parameters/Blend2/blend_amount = 1.0
 "parameters/Movement Blend/blend_position" = Vector2( 0, 0 )
+parameters/transition/current = 0
