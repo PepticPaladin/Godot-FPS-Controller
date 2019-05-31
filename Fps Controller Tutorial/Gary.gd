@@ -29,7 +29,9 @@ var has_contact : bool
 #slope variables
 const MAX_SLOPE_ANGLE : int = 35
 
-onready var mainNode : Spatial = get_node("..") #Gets gary's parent, the Main node in this case
+# node references
+var mainNode : Spatial #Gets gary's parent, the Main node in this case
+var playerMeshNode : Spatial
 
 func _ready():
 	camera_angle = 0
@@ -44,8 +46,15 @@ func _ready():
 	in_air = 0
 	has_contact = false
 	
-	
+	#main node
+	mainNode = get_node("..")
 	mainNode.invOpen = false
+	
+	#player mesh scene node
+	playerMeshNode = get_node("PlayerMesh")
+	
+	var playerSkeleton : Skeleton = playerMeshNode.get_node("Skeleton")
+	var playerAnimTree : AnimationTree = playerMeshNode.get_node("AnimationPlayer/AnimationTree")
 
 func _physics_process(delta):
 	if !mainNode.invOpen:
@@ -173,11 +182,11 @@ func aim():
 		camera_change = Vector2()
 
 
-func _on_Area_body_entered( body ):
-	if body.name == "Gary":
-		flying = true
-
-
-func _on_Area_body_exited( body ):
-	if body.name == "Gary":
-		flying = false
+#func _on_Area_body_entered( body ):
+#	if body.name == "Jerome":
+#		flying = true
+#
+#
+#func _on_Area_body_exited( body ):
+#	if body.name == "Jerome":
+#		flying = false
