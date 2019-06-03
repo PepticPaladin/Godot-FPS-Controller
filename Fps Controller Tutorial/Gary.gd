@@ -20,8 +20,7 @@ const MAX_RUNNING_SPEED : float = 30.0
 const ACCEL : float = 2.0
 const DEACCEL : float = 6.0
 
-enum Dir {For, ForRight, Right, BackRight, Back, BackLeft, Left, ForLeft}
-var moveDir : int # this is of type Dir
+var moveDir : Vector2
 
 #jumping
 const JUMP_HEIGHT : float = 15.0
@@ -66,12 +65,12 @@ func _ready():
 func _process(delta):
 	#get the movement direction
 	
-	#if direction.dot(Vector3())
 	
 	
 	#animation handling
 	
 	var moving : bool
+	
 	#transition from moving to idle
 	if Input.is_action_pressed("move_forward") or Input.is_action_pressed("move_right") or Input.is_action_pressed("move_backward") or Input.is_action_pressed("move_left"):
 		moving = true
