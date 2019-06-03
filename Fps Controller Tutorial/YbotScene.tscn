@@ -66,17 +66,17 @@ input_1/name = "Movement"
 input_1/auto_advance = false
 
 [sub_resource type="AnimationNodeBlendTree" id=12]
-graph_offset = Vector2( -289, -108 )
+graph_offset = Vector2( -289, 19 )
 nodes/Idle/node = SubResource( 1 )
 nodes/Idle/position = Vector2( -100, -40 )
 "nodes/Movement Blend/node" = SubResource( 10 )
 "nodes/Movement Blend/position" = Vector2( -100, 120 )
+nodes/main/node = SubResource( 11 )
+nodes/main/position = Vector2( 180, 0 )
 nodes/output/position = Vector2( 660, 40 )
-nodes/transition/node = SubResource( 11 )
-nodes/transition/position = Vector2( 180, 0 )
-node_connections = [ "output", 0, "transition", "transition", 0, "Idle", "transition", 1, "Movement Blend" ]
+node_connections = [ "output", 0, "main", "main", 0, "Idle", "main", 1, "Movement Blend" ]
 
-[node name="Scene Root" index="0" instance=ExtResource( 1 )]
+[node name="Scene Root" instance=ExtResource( 1 )]
 
 [node name="AnimationPlayer" parent="." index="1"]
 anims/anim_JogStrafeLeft = ExtResource( 2 )
@@ -95,4 +95,4 @@ tree_root = SubResource( 12 )
 anim_player = NodePath("..")
 active = true
 "parameters/Movement Blend/blend_position" = Vector2( 0, 0 )
-parameters/transition/current = 0
+parameters/main/current = 0

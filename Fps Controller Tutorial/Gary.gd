@@ -33,6 +33,9 @@ const MAX_SLOPE_ANGLE : int = 35
 var mainNode : Spatial #Gets gary's parent, the Main node in this case
 var playerMeshNode : Spatial
 
+var playerSkeleton : Skeleton
+var playerAnimTree : AnimationTree
+
 func _ready():
 	camera_angle = 0
 	mouse_sensitivity = 0.3
@@ -53,8 +56,51 @@ func _ready():
 	#player mesh scene node
 	playerMeshNode = get_node("PlayerMesh")
 	
-	var playerSkeleton : Skeleton = playerMeshNode.get_node("Skeleton")
-	var playerAnimTree : AnimationTree = playerMeshNode.get_node("AnimationPlayer/AnimationTree")
+	playerSkeleton = playerMeshNode.get_node("Skeleton")
+	playerAnimTree = playerMeshNode.get_node("AnimationPlayer/AnimationTree")
+	
+	
+func _process(delta):
+	#animation handling
+	
+	var moving : bool
+	#transition from moving to idle
+	if Input.is_action_pressed("move_forward") or Input.is_action_pressed("move_right") or Input.is_action_pressed("move_backward") or Input.is_action_pressed("move_left"):
+		moving = true
+	else:
+		moving = false
+	
+	if moving:
+		playerAnimTree["parameters/main/current"] = "Movement"
+	else:
+		playerAnimTree["parameters/main/current"] = "Idle"
+	
+	#movement blend space
+	#forward
+	if Input.is_action_pressed("move_forward"):
+		playerAnimTree["parameters/Movement Blend/blend_position"] = Vector2(0, 0.6)
+	#forward/right
+	elif Input.is_action_pressed("move_forward") and Input.is_action_pressed("move_right"):
+		playerAnimTree["parameters/Movement Blend/blend_position"] = Vector2(0.2, 0.4)
+	#right
+	elif Input.is_action_pressed("move_right"):
+		playerAnimTree["parameters/Movement Blend/blend_position"] = Vector2(0.3, 0)
+	#back right
+	elif Input.is_action_pressed("move_backward") and Input.is_action_pressed("move_right"):
+		playerAnimTree["parameters/Movement Blend/blend_position"] = Vector2(0.2, -0.4)
+	#backward
+	elif Input.is_action_pressed("move_backward"):
+		playerAnimTree["parameters/Movement Blend/blend_position"] = Vector2(0, -0.6)
+	#back left
+	elif Input.is_action_pressed("move_backward") and Input.is_action_pressed("move_left"):
+		playerAnimTree["parameters/Movement Blend/blend_position"] = Vector2(-0.2, -0.4)
+	#left
+	elif Input.is_action_pressed("move_left"):
+		playerAnimTree["parameters/Movement Blend/blend_position"] = Vector2(-0.3, 0)
+	#forward left
+	elif Input.is_action_pressed("move_forward") and Input.is_action_pressed("move_left"):
+		playerAnimTree["parameters/Movement Blend/blend_position"] = Vector2(-0.2, 0.4)
+	
 
 func _physics_process(delta):
 	if !mainNode.invOpen:
