@@ -20,6 +20,9 @@ const MAX_RUNNING_SPEED : float = 30.0
 const ACCEL : float = 2.0
 const DEACCEL : float = 6.0
 
+enum Dir {For, ForRight, Right, BackRight, Back, BackLeft, Left, ForLeft}
+var moveDir : int # this is of type Dir
+
 #jumping
 const JUMP_HEIGHT : float = 15.0
 
@@ -61,6 +64,11 @@ func _ready():
 	
 	
 func _process(delta):
+	#get the movement direction
+	
+	#if direction.dot(Vector3())
+	
+	
 	#animation handling
 	
 	var moving : bool
@@ -71,10 +79,10 @@ func _process(delta):
 		moving = false
 	
 	if moving:
-		playerAnimTree["parameters/main/current"] = "Movement"
+		playerAnimTree["parameters/state/current"] = "Movement"
 	else:
-		playerAnimTree["parameters/main/current"] = "Idle"
-	
+		playerAnimTree["parameters/state/current"] = "Idle"
+
 	#movement blend space
 	#forward
 	if Input.is_action_pressed("move_forward"):
@@ -101,6 +109,7 @@ func _process(delta):
 	elif Input.is_action_pressed("move_forward") and Input.is_action_pressed("move_left"):
 		playerAnimTree["parameters/Movement Blend/blend_position"] = Vector2(-0.2, 0.4)
 	
+	print(playerAnimTree["parameters/Movement Blend/blend_position"])
 
 func _physics_process(delta):
 	if !mainNode.invOpen:
